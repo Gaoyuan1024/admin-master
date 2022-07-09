@@ -9,7 +9,7 @@ $base-color-default: #0187fb;
 //默认层级
 $base-z-index: 999;
 //横向布局纵向布局时菜单背景色
-$base-menu-background: #21252b;
+$base-menu-background: #FFFFFF;
 //菜单文字颜色
 $base-menu-color: hsla(0, 0%, 100%, 0.95);
 //菜单选中文字颜色
@@ -17,7 +17,7 @@ $base-menu-color-active: hsla(0, 0%, 100%, 0.95);
 //菜单选中背景色
 $base-menu-background-active: $base-color-default;
 //标题颜色
-$base-title-color: #fff;
+$base-title-color: $base-color-default;
 //字体大小配置
 $base-font-size-small: 12px;
 $base-font-size-default: 14px;
@@ -39,7 +39,7 @@ $base-border-color: #dcdfe6;
 //输入框高度
 $base-input-height: 32px; 
 //默认paddiing
-$base-padding: 20px;
+$base-padding: 12px;
 //默认阴影
 $base-box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
 //横向布局时top-bar、logo、一级菜单的高度
@@ -49,15 +49,15 @@ $base-logo-height: 75px;
 //顶部nav-bar的高度
 $base-nav-bar-height: 60px;
 //顶部多标签页tabs-bar的高度
-$base-tabs-bar-height: 55px;
+$base-tabs-bar-height: 45px;
 //顶部多标签页tabs-bar中每一个item的高度
-$base-tag-item-height: 30px;
+$base-tag-item-height: 26px;
 //菜单li标签的高度
-$base-menu-item-height: 50px;
+$base-menu-item-height: 40px;
 //app-main的高度
-$base-app-main-height: calc(100vh - #{$base-nav-bar-height} - #{$base-tabs-bar-height} - #{$base-padding} - #{$base-padding} - 55px - 55px);
+$base-app-main-height: calc(100vh - #{$base-nav-bar-height} - #{$base-tabs-bar-height} - #{$base-padding} - #{$base-padding} - 30px - 30px);
 //纵向布局时左侧导航未折叠时的宽度
-$base-left-menu-width: 256px;
+$base-left-menu-width: 220px;
 //纵向布局时左侧导航未折叠时右侧内容的宽度
 $base-right-content-width: calc(100% - #{$base-left-menu-width});
 //纵向布局时左侧导航已折叠时的宽度

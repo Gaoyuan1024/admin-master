@@ -38,24 +38,33 @@
     </vab-query-form>
 
     <u-table
+      pagination-show
+      :current-page="queryForm.pageNo"
+      :layout="layout"
+      :page-size="queryForm.pageSize"
+      :page-sizes="pageSizes"
+      :total="total"     
       ref="tableSort"
       v-loading="listLoading"
       :data="list"
+      :size="'mini'"
       :border="true"
       :element-loading-text="elementLoadingText"
       :height="height"
       row-key="id"
-      :record-table-select="true"
+      record-table-select
       use-virtual
       big-data-checkbox
       @selection-change="setSelectRows"
+      @table-select-change="tableSelectChange"
       @sort-change="tableSortChange"
+      @handlePageSize="handlePageSize"
     >
       <u-table-column
         show-overflow-tooltip
         type="selection"
         width="55"
-        :selectable="selectable"
+        reserve-selection
       ></u-table-column>
       <u-table-column show-overflow-tooltip label="序号" width="95">
         <template #default="scope">
@@ -119,7 +128,7 @@
         </template>
       </u-table-column>
     </u-table>
-    <el-pagination
+    <!-- <el-pagination
       :background="background"
       :current-page="queryForm.pageNo"
       :layout="layout"
@@ -127,7 +136,7 @@
       :total="total"
       @current-change="handleCurrentChange"
       @size-change="handleSizeChange"
-    ></el-pagination>
+    ></el-pagination> -->
     <table-edit ref="edit"></table-edit>
   </div>
 </template>
@@ -166,6 +175,7 @@
           pageSize: 500,
           title: '',
         },
+        pageSizes:[10, 20, 50, 100, 500, 1000]
       }
     },
     computed: {
@@ -191,14 +201,24 @@
 
       tableSortChange() {
         const imageList = []
-        this.$refs.tableSort.tableData.forEach((item, index) => {
+        this.$refs.tableSort.data.forEach((item, index) => {
           imageList.push(item.img)
         })
         this.imageList = imageList
       },
+      handlePageSize({page, size}){
+        console.log(page, size)
+        this.queryForm.pageSize = size
+        this.queryForm.pageNo = page
+        this.fetchData()
+      },
       setSelectRows(val) {
         console.log(val);
-        this.selectRows = val
+        // this.selectRows = val
+      },
+      tableSelectChange(tableSelectData){
+        console.log(tableSelectData);
+
       },
       handleAdd() {
         this.$refs['edit'].showEdit()
@@ -227,14 +247,14 @@
           }
         }
       },
-      handleSizeChange(val) {
-        this.queryForm.pageSize = val
-        this.fetchData()
-      },
-      handleCurrentChange(val) {
-        this.queryForm.pageNo = val
-        this.fetchData()
-      },
+      // handleSizeChange(val) {
+      //   this.queryForm.pageSize = val
+      //   this.fetchData()
+      // },
+      // handleCurrentChange(val) {
+      //   this.queryForm.pageNo = val
+      //   this.fetchData()
+      // },
       handleQuery() {
         this.queryForm.pageNo = 1
         this.fetchData()

@@ -211,9 +211,9 @@ html {
       @include scrollbar;
     }
 
-    .el-submenu__title i {
-      color: $base-menu-color;
-    }
+    // .el-submenu__title i {
+    //   color: $base-menu-color;
+    // }
 
     .el-dialog,
     .el-message-box {
@@ -264,13 +264,14 @@ html {
     .el-submenu {
       margin: 7px !important;
       border-radius: 5px !important;
+      min-width: initial !important;
       &:hover {
         border-radius: 5px !important;
       }
 
-      &.is-active {
-        background: $base-color-default !important;
-      }
+      // &.is-active {
+      //   background: $base-color-default !important;
+      // }
     }
   }
 }

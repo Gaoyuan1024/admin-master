@@ -173,6 +173,7 @@
     methods: {
       tableSortChange() {
         const imageList = []
+        console.log(this.$refs.tableSort);
         this.$refs.tableSort.tableData.forEach((item, index) => {
           imageList.push(item.img)
         })
