@@ -37,89 +37,38 @@
       </vab-query-form-right-panel>
     </vab-query-form>
 
-    <el-table
-      ref="tableSort"
-      v-loading="listLoading"
-      :data="list"
-      :border="true"
-      :element-loading-text="elementLoadingText"
-      :height="height"
-      row-key='id'
-      @selection-change="setSelectRows"
-      @sort-change="tableSortChange"
-    >
-      <el-table-column
-        show-overflow-tooltip
-        type="selection"
-        reserve-selection
-        width="55"
-      ></el-table-column>
-      <el-table-column show-overflow-tooltip label="序号" width="95">
-        <template #default="scope">
-          {{ scope.$index + 1 }}
-        </template>
-      </el-table-column>
-      <el-table-column
-        show-overflow-tooltip
-        prop="title"
-        label="标题"
-      ></el-table-column>
-      <el-table-column
-        show-overflow-tooltip
-        label="作者"
-        prop="author"
-      ></el-table-column>
-      <!-- <el-table-column show-overflow-tooltip label="头像">
-        <template #default="{ row }">
-          <el-image
-            v-if="imgShow"
-            :preview-src-list="imageList"
-            :src="row.img"
-          ></el-image>
-        </template>
-      </el-table-column> -->
-      <el-table-column
-        show-overflow-tooltip
-        label="点击量"
-        prop="pageViews"
-        sortable
-      ></el-table-column>
-      <el-table-column show-overflow-tooltip label="状态">
-        <template #default="{ row }">
-          <el-tooltip
-            :content="row.status"
-            class="item"
-            effect="dark"
-            placement="top-start"
-          >
-            <el-tag :type="row.status | statusFilter">
-              {{ row.status }}
-            </el-tag>
-          </el-tooltip>
-        </template>
-      </el-table-column>
-      <el-table-column
-        show-overflow-tooltip
-        label="时间"
-        prop="datetime"
-        width="200"
-      ></el-table-column>
-      <el-table-column show-overflow-tooltip label="操作" width="180px">
-        <template #default="{ row }">
-          <el-button type="text" @click="handleEdit(row)">编辑</el-button>
-          <el-button type="text" @click="handleDelete(row)">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <el-pagination
-      :background="background"
-      :current-page="queryForm.pageNo"
-      :layout="layout"
-      :page-size="queryForm.pageSize"
-      :total="total"
-      @current-change="handleCurrentChange"
-      @size-change="handleSizeChange"
-    ></el-pagination>
+    <table-list 
+      ref="multipleTable" 
+      :data="list" 
+      :columns="columns"
+      :settings="tableSettings"
+      :queryForm="queryForm"
+      @selection="setSelectRows"
+      @tableSelectChange="tableSelectChange"
+      @pageSize="handleSizeChange"
+      @currentPage="handleCurrentChange"
+      >
+      <!-- <template slot="avatar">
+        <u-table-column show-overflow-tooltip label="头像">
+          <template #default="{ row }">
+            <el-image
+              :preview-src-list="imageList"
+              :src="row.img"
+            ></el-image>
+          </template>
+        </u-table-column>
+      </template> -->
+
+      <template slot="action">
+        <u-table-column show-overflow-tooltip label="操作" width="180px">
+          <template #default="{ row }">
+            <el-button type="text" @click="handleEdit(row)">编辑</el-button>
+            <el-button type="text" @click="handleDelete(row)">删除</el-button>
+          </template>
+        </u-table-column>
+      </template>
+    </table-list>
+
     <table-edit ref="edit"></table-edit>
   </div>
 </template>
@@ -127,10 +76,12 @@
 <script>
   import { getList, doDelete } from '@/api/table'
   import TableEdit from './components/TableEdit'
+  import TableList from '@/components/TableList'
   export default {
     name: 'ComprehensiveTable',
     components: {
       TableEdit,
+      TableList,
     },
     filters: {
       statusFilter(status) {
@@ -144,20 +95,27 @@
     },
     data() {
       return {
-        imgShow: true,
+        columns: [
+          { label: '标题',   prop: 'title',     align: 'center' },
+          { label: '作者',   prop: 'author',    align: 'center' },
+          // { label: '头像',   prop: 'avatar',    align: 'center', __slotName: 'avatar' },
+          { label: '点击量', prop: 'pageViews', align: 'center' , sortable: true},
+          { label: '时间',   prop: 'datetime',  align: 'center' },
+        ],       
         list: [],
         imageList: [],
-        listLoading: true,
-        layout: 'total, sizes, prev, pager, next, jumper',
-        total: 0,
-        background: true,
-        selectRows: '',
-        elementLoadingText: '正在加载...',
+        selectRows: [],
         queryForm: {
           pageNo: 1,
-          pageSize: 20,
+          pageSize: 500,
           title: '',
         },
+        tableSettings: {
+          isSelection:true,
+          isPagination: true,
+          listLoading: true,
+          total: 0,
+        },     
       }
     },
     computed: {
@@ -171,17 +129,30 @@
     beforeDestroy() {},
     mounted() {},
     methods: {
+
+
+      selectable (row, index) {
+          if (index === 1) {
+              return false
+          } else {
+              return true
+          }
+      },
+
       tableSortChange() {
         const imageList = []
-        console.log(this.$refs.tableSort);
-        this.$refs.tableSort.tableData.forEach((item, index) => {
+        this.$refs.multipleTable.data.forEach((item, index) => {
           imageList.push(item.img)
         })
         this.imageList = imageList
       },
       setSelectRows(val) {
         console.log(val);
-        this.selectRows = val
+        // this.selectRows = val
+      },
+      tableSelectChange(tableSelectData){
+        console.log(tableSelectData);
+
       },
       handleAdd() {
         this.$refs['edit'].showEdit()
@@ -219,11 +190,13 @@
         this.fetchData()
       },
       handleQuery() {
-        this.queryForm.pageNo = 1
+        console.log(this.$refs);
+        this.$refs.multipleTable.$children[0].clearSelection()
+        this.queryForm.pageNo = 1;
         this.fetchData()
       },
       async fetchData() {
-        this.listLoading = true
+        this.tableSettings.listLoading = true;
         const { data, totalCount } = await getList(this.queryForm)
         this.list = data;
         const imageList = []
@@ -231,9 +204,9 @@
           imageList.push(item.img)
         })
         this.imageList = imageList
-        this.total = totalCount
+        this.tableSettings.total = totalCount
         setTimeout(() => {
-          this.listLoading = false
+          this.tableSettings.listLoading = false
         }, 500)
       },
       testMessage() {
@@ -271,3 +244,4 @@
       padding: $base-table-small-padding;
   }
 </style>
+
