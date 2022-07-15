@@ -24,6 +24,7 @@ const { version, author } = require('./package.json')
 const Webpack = require('webpack')
 const WebpackBar = require('webpackbar')
 const FileManagerPlugin = require('filemanager-webpack-plugin')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const dayjs = require('dayjs')
 const date = dayjs().format('YYYY_M_D')
 const time = dayjs().format('YYYY-M-D HH:mm:ss')
@@ -38,6 +39,7 @@ const mockServer = () => {
   if (process.env.NODE_ENV === 'development') return require('./mock')
   else return ''
 }
+const isProduction = process.env.NODE_ENV === 'production'
 
 module.exports = {
   publicPath,
@@ -70,6 +72,30 @@ module.exports = {
           name: webpackBarName,
         }),
       ],
+
+      // 开启分离 js
+      optimization: {
+        runtimeChunk: 'single',
+        splitChunks: {
+        chunks: 'all',
+        maxInitialRequests: Infinity,
+        minSize: 20000,
+        cacheGroups: {
+            vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            name (module) {
+                // get the name. E.g. node_modules/packageName/not/this/part.js
+                // or node_modules/packageName
+                const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1]
+                // npm package names are URL-safe, but some servers don't like @ symbols
+                return `npm.${packageName.replace('@', '')}`
+            }
+            }
+        }
+        }
+      }
+
+
     }
   },
   chainWebpack(config) {
@@ -176,6 +202,12 @@ module.exports = {
           ])
           .end()
       })
+    }
+
+    if (isProduction) {     // 分析
+      config
+          .plugin('webpack-bundle-analyzer')
+          .use(new BundleAnalyzerPlugin())
     }
   },
   runtimeCompiler: true,

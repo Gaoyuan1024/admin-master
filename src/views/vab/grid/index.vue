@@ -49,6 +49,7 @@
       :data="list"
       :size="'mini'"
       :border="true"
+      :row-height="40"
       :element-loading-text="elementLoadingText"
       :height="height"
       row-key="id"
@@ -64,6 +65,7 @@
         show-overflow-tooltip
         type="selection"
         width="55"
+        fixed
         reserve-selection
       ></u-table-column>
       <u-table-column show-overflow-tooltip label="序号" width="95">
@@ -86,7 +88,7 @@
         label="作者"
         prop="author"
       ></u-table-column>
-      <!-- <el-table-column show-overflow-tooltip label="头像">
+      <el-table-column show-overflow-tooltip label="头像">
         <template #default="{ row }">
           <el-image
             v-if="imgShow"
@@ -94,7 +96,7 @@
             :src="row.img"
           ></el-image>
         </template>
-      </el-table-column> -->
+      </el-table-column>
       <u-table-column
         show-overflow-tooltip
         label="点击量"

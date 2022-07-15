@@ -10,3 +10,9 @@
     mounted() {},
   }
 </script>
+<style lang="scss" scoped>
+  #vue-admin-beautiful{
+    height: 100vh;
+    overflow: auto;
+  }
+</style>

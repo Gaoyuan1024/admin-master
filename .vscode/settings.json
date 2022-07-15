@@ -1,5 +1,4 @@
 {
-} // {
 //   "[vue]": {
 //     "editor.defaultFormatter": "esbenp.prettier-vscode"
 //   },
@@ -7,7 +6,7 @@
 //     "strings": true
 //   },
 //   "workbench.colorTheme": "One Monokai",
-//   "editor.tabSize": 2,
+  "editor.tabSize": 2,
 //   "editor.detectIndentation": false,
 //   "emmet.triggerExpansionOnTab": true,
 //   "editor.formatOnSave": true,
@@ -52,4 +51,4 @@
 //     "@": "${workspaceRoot}/src"
 //   },
 //   "files.eol": "\n"
-// }
+}

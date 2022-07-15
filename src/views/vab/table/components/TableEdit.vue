@@ -2,6 +2,8 @@
   <el-dialog v-dialogDrag
     :title="title"
     :visible.sync="dialogFormVisible"
+    append-to-body
+    modal-append-to-body
     width="500px"
     @close="close"
   >

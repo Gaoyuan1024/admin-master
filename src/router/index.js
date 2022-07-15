@@ -53,7 +53,7 @@ export const asyncRoutes = [
       },
     ],
   },
-  /* {
+  {
     path: "/test",
     component: Layout,
     redirect: "noRedirect",
@@ -69,7 +69,7 @@ export const asyncRoutes = [
         },
       },
     ],
-  }, */
+  },
 
   {
     path: '/vab',
@@ -118,6 +118,17 @@ export const asyncRoutes = [
         name: 'Table',
         meta: {
           title: '表格',
+          permissions: ['admin'],
+        },
+      },
+      {
+        path: 'table/detail',
+        component: () => import('@/views/vab/detail/index'),
+        name: 'Detail',
+        hidden: true,
+        meta: {
+          title: '表格详情',
+          activeMenu:'/vab/table',
           permissions: ['admin'],
         },
       },
