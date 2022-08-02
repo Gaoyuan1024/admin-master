@@ -136,8 +136,10 @@ const install = (Vue, opts = {}) => {
     }
 
     if ('number' == typeof formType) {
+      console.log('111');
       height = height - paddingHeight - formHeight * formType
     } else {
+      console.log('222');
       height = height - paddingHeight
     }
     return height

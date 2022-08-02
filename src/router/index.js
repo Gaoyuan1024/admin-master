@@ -132,15 +132,15 @@ export const asyncRoutes = [
           permissions: ['admin'],
         },
       },
-      {
-        path: 'grid',
-        component: () => import('@/views/vab/grid/index'),
-        name: 'Grid',
-        meta: {
-          title: '虚拟表格',
-          permissions: ['admin'],
-        },
-      },
+      // {
+      //   path: 'grid',
+      //   component: () => import('@/views/vab/grid/index'),
+      //   name: 'Grid',
+      //   meta: {
+      //     title: '虚拟表格',
+      //     permissions: ['admin'],
+      //   },
+      // },
       {
         path: 'map',
         component: () => import('@/views/vab/map/index'),

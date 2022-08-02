@@ -1,18 +1,6 @@
 <template>
   <div class="table-container">
 
-    <flight-form
-      ref="searchForm"
-      :searchForm="searchForm"
-      :searchData="searchData"
-      :searchChildForm="searchChildForm"
-      :searchChildData="searchChildData"
-      :showSearch="showSearch"
-      @sendSearch="sendSearch"
-      @sendReset="resetForm"
-      @update:changeHeight="changeHeight"
-    ></flight-form>
-
     <!-- <vab-query-form>
       <vab-query-form-left-panel>
         <el-button type="primary" @click="handleAdd">
@@ -65,6 +53,16 @@
       :columns="columns"
       :settings="tableSettings"
       :queryForm="queryForm"
+
+      :searchForm="searchForm"
+      :searchData="searchData"
+      :searchChildForm="searchChildForm"
+      :searchChildData="searchChildData"
+      :showSearch="showSearch"
+      @sendSearch="sendSearch"
+      @sendReset="resetForm"
+      @update:changeHeight="changeHeight"
+
       @handleTopAction="handleTopAction"
       @selection="setSelectRows"
       @tableSelectChange="tableSelectChange"
@@ -115,7 +113,6 @@
   import TableList from './components/TableList'
   import TableEdit from './components/TableEdit'
   import TableSelect from './components/TableSelect'
-  import FlightForm from './components/FlightForm'
 import tree from '../../../../mock/controller/tree'
 
   export default {
@@ -123,7 +120,6 @@ import tree from '../../../../mock/controller/tree'
     components: {
       TableList,
       TableEdit,
-      FlightForm,
       TableSelect
     },
     filters: {
@@ -363,12 +359,7 @@ import tree from '../../../../mock/controller/tree'
       }
     },
     computed: {
-      height() {
-        // let top = this.TopAction.isTopAction?
-        // 42:0;
-        // console.log(this.$baseTableHeight());
-        return this.$baseTableHeight() - 100;
-      },
+
     },
     created() {
       this.fetchData()
@@ -479,7 +470,7 @@ import tree from '../../../../mock/controller/tree'
       },
       handleQuery() {
         console.log(this.$refs);
-        this.$refs.multipleTable.$children[1].clearSelection()
+        this.$refs.multipleTable.$children[2].clearSelection()
         this.queryForm.pageNo = 1;
         this.fetchData()
       },
