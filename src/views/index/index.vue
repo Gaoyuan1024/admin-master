@@ -1,6 +1,42 @@
 <template>
   <div class="index-container">
     <el-row :gutter="20">
+      <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+        <el-card shadow="never">
+          <div slot="header">
+            <span>访问量</span>
+          </div>
+          <div class="svg-tree">
+            <svg xmlns="http://www.w3.org/2000/svg" 
+                :style="{transform: 'rotate('+ angle +'deg)'}" 
+                stroke-width="1"
+                :view-box.camel="viewbox">
+                <g v-for="(item, i) in items" :key="item + i">
+
+                  <cubic-bezier
+                    :index="i"
+                    :half-size="halfSize"
+                    :top-height="topHeight"
+                    :bottom-height="bottomHeight"
+                    :radius="radius"
+                    :distance="distance"
+                    :item="item"
+                    :svgStyle="svgStyle"
+                  ></cubic-bezier>
+                </g>
+                
+              <clip-mask
+                :title="title"
+                :half-size="halfSize"
+                :top-height="topHeight"
+                :radius="radius"
+              ></clip-mask>
+            </svg>
+          </div>
+
+
+        </el-card>
+      </el-col>
       <el-col :xs="24" :sm="24" :md="12" :lg="6" :xl="6">
         <el-card shadow="never">
           <div slot="header">
@@ -193,16 +229,45 @@
   import { getRepos, getStargazers } from '@/api/github'
   import Plan from './components/Plan'
   import VersionInformation from './components/VersionInformation'
+  import ClipMask from "@/views/vab/svg/ClipMask.vue"
+  import Config from "@/views/vab/svg/Config.vue"
+  import CubicBezier from "@/views/vab/svg/CubicBezier.vue"
+
 
   export default {
     name: 'Index',
     components: {
+      ClipMask,
+      Config,
+      CubicBezier,
       VabChart,
       Plan,
       VersionInformation,
     },
     data() {
       return {
+        // svg
+        title: "全国",
+        size: 5000,
+        angle: 0,
+        items: [
+          {name: '广州市',num: 88},
+          {name: '深圳市',num: 85},
+          {name: '东莞市',num: 82},
+          {name: '香港'  ,num: 79},
+          {name: '佛山市',num: 76},
+          {name: '中山市',num: 74},
+          {name: '江门市',num: 72},
+          {name: '澳门'  ,num: 68},
+          {name: '江门市',num: 68},
+          {name: '江门市',num: 68},
+          {name: '江门市',num: 68},
+        ],
+        svgStyle:{
+          strokeWidth: 5,
+          stroke: '#E3E6ED'
+        },
+
         timer: 0,
         updateTime: process.env.VUE_APP_UPDATE_TIME,
         nodeEnv: process.env.NODE_ENV,
@@ -588,8 +653,111 @@
       }); */
       },
     },
+    computed: {
+      topHeight() {
+        // 20% of the size
+        return this.size * 0.2
+      },
+      bottomHeight() {
+        // 80% of the size
+        return this.size * 0.4
+      },
+      width() {
+        return this.size
+      },
+      halfSize() {
+        // 50% of the size
+        return this.size * 0.5
+      },
+      distance() {
+        // distance between two array items on the horizon
+        return Math.round(this.width / this.items.length)
+      },
+      // xPosition() {
+      //   return i => {
+      //      return this.distance * i + this.distance * 0.5
+      //   };     
+      // },
+      radius() {
+        return this.topHeight * 0.3
+      },
+      viewbox() {
+        return "0 0 " + this.size  + " " + this.size * 0.5
+      }
+    },
+
   }
 </script>
+<style>
+  .svg-tree{
+    width: 100%;
+    height: 400px;
+  }
+  .item {
+    stroke: #ccc;
+    stroke-width: 5;
+  }
+  path {
+    stroke: #5bbaa1;
+    fill: none;
+    stroke-width: 3;
+    stroke-linecap: round;
+  }
+  text {
+    font-size: 28px;
+    text-anchor: middle;
+  }
+  #container {
+    display: flex;
+    margin: auto;
+    height: 100vh;
+    /* width: 1000px;
+    height: 500px; */
+    justify-content: center;
+    border: 2px solid #b2ebf2;
+    border-radius: 10px;
+  }
+  #config {
+    padding: 10px;
+    margin: 5px;
+    height: fit-content;
+    background: #82e5cb;
+    border-radius: 5px;
+  }
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .title {
+    font-size: 40px;
+    font-weight: bold;
+    font-style: italic;
+    color: #2389EF;
+  }
+  .clip-svg {
+    clip-path: url(#myClip);
+  }
+  #config button {
+    float: right;
+  }
+  .item {
+    border-bottom: 1px dashed rgba(0, 0, 0, 0.5);
+    padding: 5px;
+  }
+  .action {
+    padding: 10px;
+  }
+  input,
+  button {
+    margin-bottom: 3px;
+  }
+  .circle {
+    stroke-width: 5;
+    stroke: #5bbaa1;
+    fill: none;
+  }
+</style>
 <style lang="scss" scoped>
   .index-container {
     padding: 0 !important;
